@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const _ = require('lodash');
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
@@ -11,11 +12,11 @@ const contactpageText = "Scelerisque eleifend donec pretium vulputate sapien. Rh
 let postBody = [];
 
 app.get('/', (req, res) => {
-    res.render('home', {homeText: homePageText});
+    res.render('home', {homeText: homePageText, postText: postBody});
 });
 
 app.get('/home', (req, res) => {
-    res.render('home', {homeText: homePageText})
+    res.render('home', {homeText: homePageText, postText: postBody})
 });
 
 app.get('/about-us', (req, res) => {
@@ -28,6 +29,23 @@ app.get('/contact-us', (req, res) => {
 
 app.get('/compose', (req, res) => {
     res.render('compose');
+});
+
+app.get('/posts/:postName', (req, res)=> {
+    res.render('home', {homeText: homePageText, postText: postBody});
+    let postParams = req.params.postName;
+    let postParamsLower = _.lowerCase(postParams);
+    postBody.forEach(function(postTitle) {
+        const storedTitle = postTitle.inputTitleValue; 
+        const storedTitleLower = _.lowerCase(storedTitle);
+
+        if( storedTitleLower === postParamsLower) {
+            console.log("It's a Match");
+            res.render('post', {postText: postBody});
+        } else {
+            console.log("It's not a match");
+        }      
+    });    
 });
 
 app.post('/', (req, res) => {

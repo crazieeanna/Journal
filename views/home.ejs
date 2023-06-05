@@ -2,4 +2,8 @@
 <div class="container">
     <h1>Home</h1>
    <p><%= homeText %></p>
+   <% for(i = 0; i < postText.length; i ++) { %>
+    <h1><%= postText[i].inputTitleValue %></h1>
+    <p><%= postText[i].inputPostvalue %></p>
+   <% } %>   
 </div>
